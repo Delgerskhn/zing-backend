@@ -1,13 +1,14 @@
 package com.example.Zing.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="client")
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
     @Column(name="first_name")
     private String first_name;
     @Column(name="last_name")
@@ -16,12 +17,14 @@ public class Client {
     private String picture_url;
     @Column(name="email")
     private String email;
+    @OneToMany
+    private List<Template> templates;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
