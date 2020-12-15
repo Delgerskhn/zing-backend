@@ -29,9 +29,18 @@ public class NewsController {
         this.restTemplate = builder.build();
     }
 
+    @PostMapping("search")
+    public NewsResult directSearch(@RequestBody Template template) {
+        return search(template);
+    }
+
     @GetMapping("{templateId}")
     public NewsResult getEverything(@PathVariable(value="templateId") Integer templateId) throws ResourceNotFoundException {
         Template template = this.templateRepository.findById(templateId).orElseThrow(()->new ResourceNotFoundException("Template not found"));
+        return search(template);
+    }
+
+    public NewsResult search(Template template) {
         String url = "https://newsapi.org/v2/everything";
         HttpHeaders headers = new HttpHeaders();
         HttpEntity<?> entity = new HttpEntity<>(headers);

@@ -8,7 +8,7 @@ import java.util.List;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private float id;
     @Column(name="first_name")
     private String first_name;
     @Column(name="last_name")
@@ -20,7 +20,19 @@ public class Client {
     @OneToMany
     private List<Template> templates;
 
-    public Integer getId() {
+    public void setId(float id) {
+        this.id = id;
+    }
+
+    public List<Template> getTemplates() {
+        return templates;
+    }
+
+    public void setTemplates(List<Template> templates) {
+        this.templates = templates;
+    }
+
+    public float getId() {
         return id;
     }
 

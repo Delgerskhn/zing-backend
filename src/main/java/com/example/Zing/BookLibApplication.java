@@ -1,7 +1,9 @@
 package com.example.Zing;
 
+import com.example.Zing.filter.FacebookFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,6 +15,16 @@ public class BookLibApplication {
 
         SpringApplication.run(BookLibApplication.class, args);
     }
+
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.setFilter(new FacebookFilter());
+        registrationBean.addUrlPatterns("/news/*");
+
+        return registrationBean;
+    }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
