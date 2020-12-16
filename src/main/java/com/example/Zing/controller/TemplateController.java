@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -15,7 +16,10 @@ public class TemplateController {
     @Autowired
     private TemplateRepository templateRepository;
     @PostMapping("add")
-    public Template createTemplate(@RequestBody Template template) throws ResourceNotFoundException {
+    public Template createTemplate(
+            HttpServletRequest servletRequest,
+            @RequestBody Template template
+    ) throws ResourceNotFoundException {
         Template newTemplate = this.templateRepository.save(template);
         return newTemplate;
     }

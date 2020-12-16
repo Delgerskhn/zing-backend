@@ -20,7 +20,7 @@ public class BookLibApplication {
     public FilterRegistrationBean filterRegistrationBean() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new FacebookFilter());
-        registrationBean.addUrlPatterns("/news/*");
+        registrationBean.addUrlPatterns("/news/searchByTemplate/*", "/user/getTemplates", "/user/addTemplate");
 
         return registrationBean;
     }

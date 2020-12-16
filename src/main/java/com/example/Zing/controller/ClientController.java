@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.persistence.EntityExistsException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user/")
@@ -34,12 +37,36 @@ public class ClientController {
 
     @PostMapping("getToken")
     public AccessToken getToken(@RequestHeader(value="fb_exchange_token") String fb_exchange_token) {
-        return facebookService.longLivedToken(fb_exchange_token);
+        AccessToken accessToken = facebookService.longLivedToken(fb_exchange_token);
+
+        return accessToken;
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<Client> registerClient(HttpServletRequest servletRequest, @RequestBody Client client) {
+        Client user = clientRepository.findClientByFbid(client.getFbid());
+        if(user!=null) {
+            throw new EntityExistsException("Client registered already!");
+        }
+        return ResponseEntity.ok(clientRepository.save(client));
+    }
+
+    @PostMapping("addTemplate")
+    public ResponseEntity<Client> addTemplate(HttpServletRequest servletRequest, @RequestBody Template template) throws ResourceNotFoundException {
+        String userId = (String) servletRequest.getAttribute("user_id");
+        Client client = clientRepository.findClientByFbid(userId);
+        if(client==null) throw new ResourceNotFoundException("User not found");
+        client.addTemplate(template);
+        return ResponseEntity.ok(clientRepository.save(client));
     }
 
     @GetMapping("getTemplates")
-    public List<Template> getTemplates(@RequestHeader(value="Authorization") String token, @RequestHeader(value="userId") String userId) throws ResourceNotFoundException {
-        Client client = clientRepository.findById(Long.parseLong(userId)).orElseThrow(()->new ResourceNotFoundException("User not found"));
+    public List<Template> getTemplates(
+            HttpServletRequest servletRequest) throws ResourceNotFoundException {
+        String userId = (String) servletRequest.getAttribute("user_id");
+        System.out.println(userId);
+        Client client = clientRepository.findClientByFbid(userId);
+        if(client==null) throw new ResourceNotFoundException("User not found");
         return client.getTemplates();
     }
 

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/news/")
 public class NewsController {
@@ -34,8 +36,12 @@ public class NewsController {
         return search(template);
     }
 
-    @GetMapping("{templateId}")
-    public NewsResult getEverything(@PathVariable(value="templateId") Integer templateId) throws ResourceNotFoundException {
+    @GetMapping("searchByTemplate/{templateId}")
+    public NewsResult getEverything(
+            HttpServletRequest servletRequest,
+            @PathVariable(value="templateId") Integer templateId
+           ) throws ResourceNotFoundException {
+        System.out.println(servletRequest.getAttribute("user_id"));
         Template template = this.templateRepository.findById(templateId).orElseThrow(()->new ResourceNotFoundException("Template not found"));
         return search(template);
     }

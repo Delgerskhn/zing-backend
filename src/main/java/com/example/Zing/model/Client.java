@@ -8,19 +8,33 @@ import java.util.List;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private float id;
+    private long id;
     @Column(name="first_name")
     private String first_name;
     @Column(name="last_name")
     private String last_name;
     @Column(name="picture_url")
     private String picture_url;
+    @Column(name="fbid")
+    private String fbid;
     @Column(name="email")
     private String email;
-    @OneToMany
+    @OneToMany( cascade = CascadeType.ALL)
     private List<Template> templates;
 
-    public void setId(float id) {
+    public void addTemplate(Template template) {
+        this.templates.add(template);
+    }
+
+    public String getFbid() {
+        return fbid;
+    }
+
+    public void setFbid(String fb_id) {
+        this.fbid = fb_id;
+    }
+
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -32,7 +46,7 @@ public class Client {
         this.templates = templates;
     }
 
-    public float getId() {
+    public long getId() {
         return id;
     }
 
