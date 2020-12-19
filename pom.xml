@@ -14,10 +14,6 @@
     <name>BookLib</name>
     <description>Book library project for software development</description>
 
-    <properties>
-        <java.version>11</java.version>
-    </properties>
-
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
         <dependency>
